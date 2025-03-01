@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Représentation Géométrique des Nombres</title>
+    <title>Représentation Géométrique des Nombres (0-9999)</title>
     <style>
         :root {
             --background-color: #F8F1E9;
             --primary-color: #4A6FA5;
             --secondary-color: #DAA520;
-            --tens-color: #FF6B99;
-            --tens-stroke: #E34F7F;
-            --hundreds-color: #FFB6C1;
-            --hundreds-stroke: #FF95A8;
+            --tens-color: #FF1493; /* Rose foncé pour les dizaines */
+            --tens-stroke: #C71585;
+            --hundreds-color: #FF69B4; /* Rose moyen pour les centaines */
+            --hundreds-stroke: #FF1493;
+            --thousands-color: #FFB6C1; /* Rose pâle pour les milliers */
+            --thousands-stroke: #FF69B4;
             --text-color: #333;
             --border-color: #ddd;
             --shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -255,7 +257,6 @@
             display: block;
         }
 
-        /* Dark mode styles */
         body.dark-mode {
             --background-color: #2c3e50;
             --text-color: #ecf0f1;
@@ -266,6 +267,8 @@
             --tens-stroke: #d33682;
             --hundreds-color: #fd79a8;
             --hundreds-stroke: #e84393;
+            --thousands-color: #FFD700;
+            --thousands-stroke: #DAA520;
         }
 
         body.dark-mode .explanation {
@@ -281,7 +284,6 @@
             background-color: #2c3e50;
         }
 
-        /* Animation classes */
         .fade-in {
             opacity: 0;
             animation: fadeIn 0.5s forwards;
@@ -308,7 +310,7 @@
     </style>
 </head>
 <body>
-    <h1>Représentation Géométrique des Nombres (0-999)</h1>
+    <h1>Représentation Géométrique des Nombres (0-9999)</h1>
     
     <div class="tabs">
         <button class="tab active" data-tab="visualization">Visualisation</button>
@@ -319,7 +321,7 @@
     <div id="visualization" class="tab-content active">
         <div class="controls-container">
             <div class="input-container">
-                <input type="number" id="number-input" min="0" max="999" placeholder="0-999" value="0">
+                <input type="number" id="number-input" min="0" max="9999" placeholder="0-9999" value="0">
                 <button id="generate-btn">Générer</button>
             </div>
             <button class="theme-toggle" id="theme-toggle" title="Changer de thème">
@@ -328,7 +330,7 @@
         </div>
         
         <div class="slider-container">
-            <input type="range" id="number-slider" min="0" max="999" value="0">
+            <input type="range" id="number-slider" min="0" max="9999" value="0">
         </div>
         
         <div class="buttons-container">
@@ -361,6 +363,10 @@
                 <div class="legend-color" style="background-color: var(--hundreds-color);"></div>
                 <span>Centaines</span>
             </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--thousands-color);"></div>
+                <span>Milliers</span>
+            </div>
         </div>
     </div>
     
@@ -375,8 +381,8 @@
                 <li><strong>3</strong> : Un triangle équilatéral avec un sommet en haut</li>
                 <li><strong>4</strong> : Un carré</li>
                 <li><strong>5</strong> : Un carré + un point au centre</li>
-                <li><strong>6</strong> : Deux triangles équilatéraux symétriques (un avec sommet en haut, l'autre avec sommet en bas)</li>
-                <li><strong>7</strong> : Deux triangles équilatéraux symétriques + un point au centre</li>
+                <li><strong>6</strong> : Deux triangles équilatéraux symétriques</li>
+                <li><strong>7</strong> : Deux triangles + un point au centre</li>
                 <li><strong>8</strong> : Deux carrés</li>
                 <li><strong>9</strong> : Deux carrés + un point au centre</li>
             </ul>
@@ -384,16 +390,22 @@
             <ul>
                 <li><strong>10</strong> : 1 pétale en haut</li>
                 <li><strong>20</strong> : 2 pétales (haut et bas)</li>
-                <li><strong>30</strong> : 3 pétales en triangle équilatéral</li>
-                <li><strong>40</strong> : 4 pétales en carré</li>
-                <li><strong>50-90</strong> : Pétales distribuées respectivement en pentagone, hexagone, heptagone, octogone et nonagone</li>
+                <li><strong>30</strong> : 3 pétales en triangle</li>
+                <li><strong>40-90</strong> : Distribution en polygones réguliers</li>
             </ul>
-            <p><strong>Centaines (pétales roses clairs sur le second cercle) :</strong></p>
+            <p><strong>Centaines (pétales roses sur le second cercle) :</strong></p>
             <ul>
                 <li><strong>100</strong> : 1 pétale en haut</li>
                 <li><strong>200</strong> : 2 pétales (haut et bas)</li>
-                <li><strong>300</strong> : 3 pétales en triangle équilatéral</li>
+                <li><strong>300</strong> : 3 pétales en triangle</li>
                 <li><strong>400-900</strong> : Distribution similaire aux dizaines</li>
+            </ul>
+            <p><strong>Milliers (pétales roses clairs sur le troisième cercle) :</strong></p>
+            <ul>
+                <li><strong>1000</strong> : 1 pétale en haut</li>
+                <li><strong>2000</strong> : 2 pétales (haut et bas)</li>
+                <li><strong>3000</strong> : 3 pétales en triangle</li>
+                <li><strong>4000-9000</strong> : Distribution similaire aux dizaines et centaines</li>
             </ul>
         </div>
     </div>
@@ -403,18 +415,18 @@
             <h3>Exemples et applications :</h3>
             <p>Cette représentation géométrique des nombres offre plusieurs avantages :</p>
             <ul>
-                <li><strong>Visualisation intuitive</strong> : Elle permet de comprendre visuellement la structure décimale des nombres.</li>
-                <li><strong>Modèle mental</strong> : Aide à créer un modèle mental pour comprendre les valeurs positionnelles.</li>
-                <li><strong>Reconnaissance de motifs</strong> : Développe la capacité à reconnaître des motifs mathématiques.</li>
+                <li><strong>Visualisation intuitive</strong> : Structure décimale visualisée.</li>
+                <li><strong>Modèle mental</strong> : Compréhension des valeurs positionnelles.</li>
+                <li><strong>Reconnaissance de motifs</strong> : Identification de motifs mathématiques.</li>
             </ul>
             <p>Exemples notables :</p>
             <ul>
                 <li><strong>42</strong> : Carré avec 4 pétales roses foncés</li>
-                <li><strong>100</strong> : Cercle doré vide avec 1 pétale rose clair</li>
-                <li><strong>369</strong> : Triangle, 6 pétales roses foncés, 3 pétales roses clairs, et deux carrés + un point</li>
-                <li><strong>777</strong> : Trois étoiles à 7 branches (symboliques)</li>
+                <li><strong>100</strong> : Cercle doré vide avec 1 pétale rose</li>
+                <li><strong>1423</strong> : Triangle, 2 pétales roses foncés, 4 pétales roses, 1 pétale rose clair</li>
+                <li><strong>7777</strong> : Deux triangles + point, 7 pétales roses foncés, 7 pétales roses, 7 pétales roses clairs</li>
             </ul>
-            <p>Utilisez les boutons de navigation pour explorer ces exemples et d'autres nombres intéressants.</p>
+            <p>Utilisez les boutons pour explorer ces exemples.</p>
         </div>
     </div>
     
@@ -434,17 +446,15 @@
             const tabs = document.querySelectorAll('.tab');
             const tabContents = document.querySelectorAll('.tab-content');
             
-            // Variables d'état
             let isAnimating = false;
-            let animationSpeed = 200; // ms par nombre
+            let animationSpeed = 200;
             let animationInterval;
             let currentNumber = 0;
             let isDarkMode = false;
             
-            // Synchroniser les entrées
             numberInput.addEventListener('input', function() {
                 const value = parseInt(this.value);
-                if (!isNaN(value) && value >= 0 && value <= 999) {
+                if (!isNaN(value) && value >= 0 && value <= 9999) {
                     numberSlider.value = value;
                     currentNumber = value;
                 }
@@ -457,11 +467,10 @@
                 drawNumber(value);
             });
             
-            // Gestionnaires d'événements
             generateBtn.addEventListener('click', function() {
                 const number = parseInt(numberInput.value);
-                if (isNaN(number) || number < 0 || number > 999) {
-                    errorMessage.textContent = "Veuillez entrer un nombre entre 0 et 999.";
+                if (isNaN(number) || number < 0 || number > 9999) {
+                    errorMessage.textContent = "Veuillez entrer un nombre entre 0 et 9999.";
                     return;
                 }
                 errorMessage.textContent = "";
@@ -478,7 +487,7 @@
             });
             
             nextBtn.addEventListener('click', function() {
-                if (currentNumber < 999) {
+                if (currentNumber < 9999) {
                     currentNumber++;
                     updateInputs();
                     drawNumberWithAnimation(currentNumber);
@@ -486,7 +495,7 @@
             });
             
             randomBtn.addEventListener('click', function() {
-                const randomNum = Math.floor(Math.random() * 1000);
+                const randomNum = Math.floor(Math.random() * 10000);
                 currentNumber = randomNum;
                 updateInputs();
                 drawNumberWithAnimation(randomNum);
@@ -506,30 +515,25 @@
                 toggleTheme();
             });
             
-            // Onglets
             tabs.forEach(tab => {
                 tab.addEventListener('click', function() {
                     const tabId = this.getAttribute('data-tab');
-                    
                     tabs.forEach(t => t.classList.remove('active'));
                     tabContents.forEach(tc => tc.classList.remove('active'));
-                    
                     this.classList.add('active');
                     document.getElementById(tabId).classList.add('active');
                 });
             });
             
-            // Fonction pour mettre à jour les entrées
             function updateInputs() {
                 numberInput.value = currentNumber;
                 numberSlider.value = currentNumber;
             }
             
-            // Fonction pour démarrer l'animation
             function startAnimation() {
                 isAnimating = true;
                 animationInterval = setInterval(function() {
-                    if (currentNumber < 999) {
+                    if (currentNumber < 9999) {
                         currentNumber++;
                     } else {
                         currentNumber = 0;
@@ -539,13 +543,11 @@
                 }, animationSpeed);
             }
             
-            // Fonction pour arrêter l'animation
             function stopAnimation() {
                 isAnimating = false;
                 clearInterval(animationInterval);
             }
             
-            // Fonction pour basculer le thème
             function toggleTheme() {
                 isDarkMode = !isDarkMode;
                 document.body.classList.toggle('dark-mode', isDarkMode);
@@ -553,7 +555,6 @@
                 drawNumber(currentNumber);
             }
             
-            // Fonction pour dessiner le nombre avec animation
             function drawNumberWithAnimation(number) {
                 const canvasContainer = document.getElementById('canvas-container');
                 canvasContainer.classList.remove('fade-in');
@@ -563,105 +564,111 @@
                 }, 50);
             }
             
-            // Couleurs
             function getColors() {
                 return {
                     BACKGROUND_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim(),
                     GOLD_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--secondary-color').trim(),
                     BLUE_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim(),
-                    PINK_COLOR_TENS: getComputedStyle(document.documentElement).getPropertyValue('--tens-color').trim(),
-                    PINK_STROKE_TENS: getComputedStyle(document.documentElement).getPropertyValue('--tens-stroke').trim(),
-                    PINK_COLOR_HUNDREDS: getComputedStyle(document.documentElement).getPropertyValue('--hundreds-color').trim(),
-                    PINK_STROKE_HUNDREDS: getComputedStyle(document.documentElement).getPropertyValue('--hundreds-stroke').trim()
+                    TENS_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--tens-color').trim(),
+                    TENS_STROKE: getComputedStyle(document.documentElement).getPropertyValue('--tens-stroke').trim(),
+                    HUNDREDS_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--hundreds-color').trim(),
+                    HUNDREDS_STROKE: getComputedStyle(document.documentElement).getPropertyValue('--hundreds-stroke').trim(),
+                    THOUSANDS_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--thousands-color').trim(),
+                    THOUSANDS_STROKE: getComputedStyle(document.documentElement).getPropertyValue('--thousands-stroke').trim()
                 };
             }
             
-            // Fonction principale pour dessiner le nombre
             function drawNumber(number) {
                 const colors = getColors();
-                
-                // Configuration
                 const canvasWidth = canvas.width;
                 const canvasHeight = canvas.height;
                 const centerX = canvasWidth / 2;
                 const centerY = canvasHeight / 2;
-                const mainRadius = Math.min(canvasWidth, canvasHeight) / 7; // Rayon du cercle principal (unités)
-                const tensRadius = mainRadius * 1.3;  // Rayon du cercle fictif où se positionnent les dizaines
-                const hundredsRadius = mainRadius * 1.7; // Rayon du second cercle doré (centaines)
-                const pointRadius = 5; // Taille fixe pour les points bleus
+                const R = Math.min(canvasWidth, canvasHeight) / 7; // Rayon du premier cercle doré
+                const pointRadius = 5;
+                const Rd = pointRadius * 3.2; // Rayon des pétales des dizaines
+                const Rc = pointRadius * 4.8; // Rayon des pétales des centaines
+                const Rm = pointRadius * 7.2; // Rayon des pétales des milliers (optionnel)
                 
-                // Effacer le canvas et dessiner le fond
+                const hundredsCircleRadius = R + Rd; // Rayon du deuxième cercle doré
+                const thousandsCircleRadius = R + Rd + Rc; // Rayon du troisième cercle doré
+                
                 ctx.fillStyle = colors.BACKGROUND_COLOR;
                 ctx.fillRect(0, 0, canvasWidth, canvasHeight);
                 
-                const hundreds = Math.floor(number / 100);
+                const thousands = Math.floor(number / 1000);
+                const hundreds = Math.floor((number % 1000) / 100);
                 const tens = Math.floor((number % 100) / 10);
                 const units = number % 10;
                 
-                // Afficher le nombre au-dessus du dessin
                 ctx.fillStyle = isDarkMode ? '#ecf0f1' : '#333';
                 ctx.font = 'bold 24px Arial';
                 ctx.textAlign = 'center';
                 ctx.fillText(`Nombre: ${number}`, centerX, 30);
-                
-                // Afficher les composantes
                 ctx.font = '16px Arial';
-                ctx.fillText(`Centaines: ${hundreds} | Dizaines: ${tens} | Unités: ${units}`, centerX, 60);
+                ctx.fillText(`Milliers: ${thousands} | Centaines: ${hundreds} | Dizaines: ${tens} | Unités: ${units}`, centerX, 60);
                 
-                // Dessiner le second cercle doré (pour les centaines) si nécessaire
-                if (hundreds > 0) {
+                // Dessiner le troisième cercle doré (milliers) si nécessaire
+                if (thousands > 0) {
                     ctx.beginPath();
-                    ctx.arc(centerX, centerY, hundredsRadius, 0, 2 * Math.PI);
+                    ctx.arc(centerX, centerY, thousandsCircleRadius, 0, 2 * Math.PI);
                     ctx.strokeStyle = colors.GOLD_COLOR;
                     ctx.lineWidth = 3;
                     ctx.stroke();
-                    
-                    // Dessiner les pétales pour les centaines
-                    drawHundreds(hundreds, colors, centerX, centerY, hundredsRadius, pointRadius);
+                    drawPetalRing(thousands, colors.THOUSANDS_COLOR, colors.THOUSANDS_STROKE, centerX, centerY, thousandsCircleRadius, Rm);
                 }
                 
-                // Dessiner les pétales pour les dizaines
+                // Dessiner le deuxième cercle doré (centaines) si nécessaire
+                if (hundreds > 0) {
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, hundredsCircleRadius, 0, 2 * Math.PI);
+                    ctx.strokeStyle = colors.GOLD_COLOR;
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                    drawPetalRing(hundreds, colors.HUNDREDS_COLOR, colors.HUNDREDS_STROKE, centerX, centerY, hundredsCircleRadius, Rc);
+                }
+                
+                // Dessiner les pétales pour les dizaines sur le premier cercle
                 if (tens > 0) {
-                    drawTens(tens, colors, centerX, centerY, mainRadius, pointRadius);
+                    drawPetalRing(tens, colors.TENS_COLOR, colors.TENS_STROKE, centerX, centerY, R, Rd);
                 }
                 
-                // Dessiner le cercle doré principal (pour les unités)
+                // Dessiner le premier cercle doré (unités)
                 ctx.beginPath();
-                ctx.arc(centerX, centerY, mainRadius, 0, 2 * Math.PI);
+                ctx.arc(centerX, centerY, R, 0, 2 * Math.PI);
                 ctx.strokeStyle = colors.GOLD_COLOR;
                 ctx.lineWidth = 3;
                 ctx.stroke();
                 
-                // Dessiner la figure pour les unités
-                drawUnits(units, colors, centerX, centerY, mainRadius, pointRadius);
+                // Dessiner les unités à l'intérieur du premier cercle
+                drawUnits(units, colors, centerX, centerY, R, pointRadius);
             }
             
-            // Fonction pour dessiner un pétale
+            function drawPetalRing(count, fillColor, strokeColor, centerX, centerY, radius, petalRadius) {
+                for (let i = 0; i < count; i++) {
+                    let angle = (count === 1) ? -Math.PI / 2 : 
+                               (count === 2) ? -Math.PI / 2 + i * Math.PI : 
+                               -Math.PI / 2 + (i * 2 * Math.PI / count);
+                    const petalStartX = centerX + radius * Math.cos(angle);
+                    const petalStartY = centerY + radius * Math.sin(angle);
+                    drawPetal(petalStartX, petalStartY, angle, petalRadius, fillColor, strokeColor);
+                }
+            }
+            
             function drawPetal(x, y, angle, petalRadius, fillColor, strokeColor) {
-                // Point de départ sur le cercle
                 const startX = x;
                 const startY = y;
-                
-                // Calculer un point perpendiculaire à l'angle pour créer la ligne plate
-                const perpAngle1 = angle + Math.PI/2;
-                const perpAngle2 = angle - Math.PI/2;
-                
+                const perpAngle1 = angle + Math.PI / 2;
+                const perpAngle2 = angle - Math.PI / 2;
                 const perpX1 = startX + petalRadius * Math.cos(perpAngle1);
                 const perpY1 = startY + petalRadius * Math.sin(perpAngle1);
                 const perpX2 = startX + petalRadius * Math.cos(perpAngle2);
                 const perpY2 = startY + petalRadius * Math.sin(perpAngle2);
                 
-                // Dessiner le pétale (demi-cercle)
                 ctx.beginPath();
                 ctx.moveTo(perpX1, perpY1);
-                
-                // Dessiner le demi-cercle
                 ctx.arc(startX, startY, petalRadius, perpAngle1, perpAngle2, true);
-                
-                // Fermer le chemin
                 ctx.closePath();
-                
-                // Remplir et border le pétale
                 ctx.fillStyle = fillColor;
                 ctx.fill();
                 ctx.strokeStyle = strokeColor;
@@ -669,108 +676,38 @@
                 ctx.stroke();
             }
             
-            // Fonction pour dessiner les dizaines (pétales roses foncés)
-            function drawTens(tens, colors, centerX, centerY, mainRadius, pointRadius) {
-                const petalRadius = pointRadius * 3.2; // Taille du pétale
-                
-                for (let i = 0; i < tens; i++) {
-                    let angle;
-                    if (tens === 1) {
-                        // 1 pétale en haut
-                        angle = -Math.PI / 2;
-                    } else if (tens === 2) {
-                        // 2 pétales en haut et en bas
-                        angle = -Math.PI / 2 + i * Math.PI;
-                    } else {
-                        // Distribuer les pétales uniformément en cercle
-                        angle = -Math.PI / 2 + (i * 2 * Math.PI / tens);
-                    }
-                    
-                    const petalStartX = centerX + mainRadius * Math.cos(angle);
-                    const petalStartY = centerY + mainRadius * Math.sin(angle);
-                    
-                    drawPetal(petalStartX, petalStartY, angle, petalRadius, colors.PINK_COLOR_TENS, colors.PINK_STROKE_TENS);
-                }
-            }
-            
-            // Fonction pour dessiner les centaines (pétales roses clairs)
-            function drawHundreds(hundreds, colors, centerX, centerY, hundredsRadius, pointRadius) {
-                const petalRadius = pointRadius * 6.4; // Taille 2x celle des pétales des dizaines
-                
-                for (let i = 0; i < hundreds; i++) {
-                    let angle;
-                    if (hundreds === 1) {
-                        // 1 pétale en haut
-                        angle = -Math.PI / 2;
-                    } else if (hundreds === 2) {
-                        // 2 pétales en haut et en bas
-                        angle = -Math.PI / 2 + i * Math.PI;
-                    } else {
-                        // Distribuer les pétales uniformément en cercle
-                        angle = -Math.PI / 2 + (i * 2 * Math.PI / hundreds);
-                    }
-                    
-                    const petalStartX = centerX + hundredsRadius * Math.cos(angle);
-                    const petalStartY = centerY + hundredsRadius * Math.sin(angle);
-                    
-                    drawPetal(petalStartX, petalStartY, angle, petalRadius, colors.PINK_COLOR_HUNDREDS, colors.PINK_STROKE_HUNDREDS);
-                }
-            }
-            
-            // Fonction pour dessiner les unités
             function drawUnits(units, colors, centerX, centerY, mainRadius, pointRadius) {
-                // Dessiner la forme correspondant au nombre d'unités
                 switch(units) {
-                    case 0:
-                        // Cercle doré vide (déjà dessiné)
+                    case 0: break;
+                    case 1: drawCenterPoint(colors, centerX, centerY, pointRadius); break;
+                    case 2: drawSegment(colors, centerX, centerY, mainRadius, pointRadius); break;
+                    case 3: drawPolygon(3, -Math.PI / 2, colors, centerX, centerY, mainRadius, pointRadius); break;
+                    case 4: drawPolygon(4, 0, colors, centerX, centerY, mainRadius, pointRadius); break;
+                    case 5: 
+                        drawPolygon(4, 0, colors, centerX, centerY, mainRadius, pointRadius); 
+                        drawCenterPoint(colors, centerX, centerY, pointRadius); 
                         break;
-                    case 1:
-                        // Un point au centre
-                        drawCenterPoint(colors, centerX, centerY, pointRadius);
+                    case 6: 
+                        drawPolygon(3, -Math.PI / 2, colors, centerX, centerY, mainRadius, pointRadius); 
+                        drawPolygon(3, Math.PI / 2, colors, centerX, centerY, mainRadius, pointRadius); 
                         break;
-                    case 2:
-                        // Un segment passant par le centre
-                        drawSegment(colors, centerX, centerY, mainRadius, pointRadius);
+                    case 7: 
+                        drawPolygon(3, -Math.PI / 2, colors, centerX, centerY, mainRadius, pointRadius); 
+                        drawPolygon(3, Math.PI / 2, colors, centerX, centerY, mainRadius, pointRadius); 
+                        drawCenterPoint(colors, centerX, centerY, pointRadius); 
                         break;
-                    case 3:
-                        // Un triangle équilatéral (un sommet en haut)
-                        drawPolygon(3, -Math.PI/2, colors, centerX, centerY, mainRadius, pointRadius);
+                    case 8: 
+                        drawPolygon(4, 0, colors, centerX, centerY, mainRadius, pointRadius); 
+                        drawPolygon(4, Math.PI / 4, colors, centerX, centerY, mainRadius, pointRadius); 
                         break;
-                    case 4:
-                        // Un carré
-                        drawPolygon(4, 0, colors, centerX, centerY, mainRadius, pointRadius);
-                        break;
-                    case 5:
-                        // Un carré + un point au centre
-                        drawPolygon(4, 0, colors, centerX, centerY, mainRadius, pointRadius);
-                        drawCenterPoint(colors, centerX, centerY, pointRadius);
-                        break;
-                    case 6:
-                        // Deux triangles équilatéraux symétriques
-                        drawPolygon(3, -Math.PI/2, colors, centerX, centerY, mainRadius, pointRadius);  // Premier triangle avec un sommet en haut
-                        drawPolygon(3, Math.PI/2, colors, centerX, centerY, mainRadius, pointRadius);   // Deuxième triangle avec un sommet en bas (symétrique)
-                        break;
-                    case 7:
-                        // Deux triangles équilatéraux symétriques + un point au centre
-                        drawPolygon(3, -Math.PI/2, colors, centerX, centerY, mainRadius, pointRadius);  // Premier triangle avec un sommet en haut
-                        drawPolygon(3, Math.PI/2, colors, centerX, centerY, mainRadius, pointRadius);   // Deuxième triangle avec un sommet en bas (symétrique)
-                        drawCenterPoint(colors, centerX, centerY, pointRadius);
-                        break;
-                    case 8:
-                        // Deux carrés
-                        drawPolygon(4, 0, colors, centerX, centerY, mainRadius, pointRadius);
-                        drawPolygon(4, Math.PI/4, colors, centerX, centerY, mainRadius, pointRadius);
-                        break;
-                    case 9:
-                        // Deux carrés + un point au centre
-                        drawPolygon(4, 0, colors, centerX, centerY, mainRadius, pointRadius);
-                        drawPolygon(4, Math.PI/4, colors, centerX, centerY, mainRadius, pointRadius);
-                        drawCenterPoint(colors, centerX, centerY, pointRadius);
+                    case 9: 
+                        drawPolygon(4, 0, colors, centerX, centerY, mainRadius, pointRadius); 
+                        drawPolygon(4, Math.PI / 4, colors, centerX, centerY, mainRadius, pointRadius); 
+                        drawCenterPoint(colors, centerX, centerY, pointRadius); 
                         break;
                 }
             }
             
-            // Fonction pour dessiner un point au centre
             function drawCenterPoint(colors, centerX, centerY, pointRadius) {
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, pointRadius, 0, 2 * Math.PI);
@@ -778,28 +715,20 @@
                 ctx.fill();
             }
             
-            // Fonction pour dessiner un segment passant par le centre
             function drawSegment(colors, centerX, centerY, mainRadius, pointRadius) {
-                const angle = Math.PI / 2; // Angle de départ (vertical)
-                
-                // Calculer les points sur le cercle
+                const angle = Math.PI / 2;
                 const x1 = centerX + mainRadius * Math.cos(angle);
                 const y1 = centerY - mainRadius * Math.sin(angle);
                 const x2 = centerX + mainRadius * Math.cos(angle + Math.PI);
                 const y2 = centerY - mainRadius * Math.sin(angle + Math.PI);
                 
-                // Dessiner les points
                 ctx.beginPath();
                 ctx.arc(x1, y1, pointRadius, 0, 2 * Math.PI);
                 ctx.fillStyle = colors.BLUE_COLOR;
                 ctx.fill();
-                
                 ctx.beginPath();
                 ctx.arc(x2, y2, pointRadius, 0, 2 * Math.PI);
-                ctx.fillStyle = colors.BLUE_COLOR;
                 ctx.fill();
-                
-                // Dessiner le segment
                 ctx.beginPath();
                 ctx.moveTo(x1, y1);
                 ctx.lineTo(x2, y2);
@@ -808,27 +737,20 @@
                 ctx.stroke();
             }
             
-            // Fonction pour dessiner un polygone régulier
             function drawPolygon(sides, rotationOffset, colors, centerX, centerY, mainRadius, pointRadius) {
                 const points = [];
-                
-                // Calculer les points du polygone
                 for (let i = 0; i < sides; i++) {
                     const angle = rotationOffset + (i * 2 * Math.PI / sides);
                     const x = centerX + mainRadius * Math.cos(angle);
                     const y = centerY + mainRadius * Math.sin(angle);
                     points.push({ x, y });
                 }
-                
-                // Dessiner les points
                 for (const point of points) {
                     ctx.beginPath();
                     ctx.arc(point.x, point.y, pointRadius, 0, 2 * Math.PI);
                     ctx.fillStyle = colors.BLUE_COLOR;
                     ctx.fill();
                 }
-                
-                // Dessiner les lignes entre les points
                 ctx.beginPath();
                 ctx.moveTo(points[0].x, points[0].y);
                 for (let i = 1; i < points.length; i++) {
@@ -840,28 +762,21 @@
                 ctx.stroke();
             }
             
-            // Initialiser avec le nombre 0
             drawNumber(0);
             
-            // Support pour les touches flèches
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'ArrowLeft') {
-                    if (currentNumber > 0) {
-                        currentNumber--;
-                        updateInputs();
-                        drawNumberWithAnimation(currentNumber);
-                    }
-                } else if (e.key === 'ArrowRight') {
-                    if (currentNumber < 999) {
-                        currentNumber++;
-                        updateInputs();
-                        drawNumberWithAnimation(currentNumber);
-                    }
+                if (e.key === 'ArrowLeft' && currentNumber > 0) {
+                    currentNumber--;
+                    updateInputs();
+                    drawNumberWithAnimation(currentNumber);
+                } else if (e.key === 'ArrowRight' && currentNumber < 9999) {
+                    currentNumber++;
+                    updateInputs();
+                    drawNumberWithAnimation(currentNumber);
                 }
             });
             
-            // Gestion des exemples rapides
-            const examples = [42, 100, 369, 777];
+            const examples = [42, 100, 1423, 7777];
             examples.forEach((num, index) => {
                 const btn = document.createElement('button');
                 btn.classList.add('secondary-btn');
