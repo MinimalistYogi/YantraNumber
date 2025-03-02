@@ -6,10 +6,11 @@
     <title>Représentation Géométrique des Nombres (0-9999)</title>
     <style>
         :root {
-            --background-color: #F8F1E9;  /* Garder la couleur originale pour l'interface */
-            --canvas-background-color: #333cff;  /* Nouvelle couleur pour le fond du canevas */
-            --primary-color: #4A6FA5;  /* Garder la couleur originale pour les boutons */
-            --units-color: #fcff33;  /* Nouvelle couleur pour les unités */
+            --background-color: #F8F1E9;
+            --canvas-background-color: #333cff; /* Nouveau fond bleu indigo pour le canevas */
+            --primary-color: #4A6FA5;
+            --units-color: #fcff33; /* Nouvelle couleur jaune pour les unités */
+            --secondary-color: #DAA520;
             --tens-color: #FF1493; /* Rose foncé pour les dizaines */
             --tens-stroke: #C71585;
             --hundreds-color: #FF69B4; /* Rose moyen pour les centaines */
@@ -270,6 +271,8 @@
             --hundreds-stroke: #e84393;
             --thousands-color: #FFD700;
             --thousands-stroke: #DAA520;
+            --canvas-background-color: #1a1e2e; /* Version sombre du fond du canevas */
+            --units-color: #fcff33; /* Couleur des unités inchangée en mode sombre */
         }
 
         body.dark-mode .explanation {
@@ -353,7 +356,7 @@
                 <span>Cercles</span>
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="background-color: var(--primary-color);"></div>
+                <div class="legend-color" style="background-color: var(--units-color);"></div>
                 <span>Unités</span>
             </div>
             <div class="legend-item">
@@ -377,7 +380,7 @@
             <p><strong>Unités (à l'intérieur du premier cercle doré) :</strong></p>
             <ul>
                 <li><strong>0</strong> : Cercle doré vide</li>
-                <li><strong>1</strong> : Un point bleu au centre</li>
+                <li><strong>1</strong> : Un point jaune au centre</li>
                 <li><strong>2</strong> : Un segment reliant deux points sur le cercle</li>
                 <li><strong>3</strong> : Un triangle équilatéral avec un sommet en haut</li>
                 <li><strong>4</strong> : Un carré</li>
@@ -568,8 +571,10 @@
             function getColors() {
                 return {
                     BACKGROUND_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim(),
+                    CANVAS_BACKGROUND_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--canvas-background-color').trim() || '#333cff',
                     GOLD_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--secondary-color').trim(),
                     BLUE_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim(),
+                    UNITS_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--units-color').trim() || '#fcff33',
                     TENS_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--tens-color').trim(),
                     TENS_STROKE: getComputedStyle(document.documentElement).getPropertyValue('--tens-stroke').trim(),
                     HUNDREDS_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--hundreds-color').trim(),
@@ -594,7 +599,8 @@
                 const hundredsCircleRadius = R + Rd; // Rayon du deuxième cercle doré
                 const thousandsCircleRadius = R + Rd + Rc; // Rayon du troisième cercle doré
                 
-                ctx.fillStyle = colors.BACKGROUND_COLOR;
+                // Utiliser la nouvelle couleur de fond pour le canevas
+                ctx.fillStyle = colors.CANVAS_BACKGROUND_COLOR;
                 ctx.fillRect(0, 0, canvasWidth, canvasHeight);
                 
                 const thousands = Math.floor(number / 1000);
@@ -712,7 +718,8 @@
             function drawCenterPoint(colors, centerX, centerY, pointRadius) {
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, pointRadius, 0, 2 * Math.PI);
-                ctx.fillStyle = colors.BLUE_COLOR;
+                // Utiliser la nouvelle couleur jaune pour les unités
+                ctx.fillStyle = colors.UNITS_COLOR;
                 ctx.fill();
             }
             
@@ -725,15 +732,21 @@
                 
                 ctx.beginPath();
                 ctx.arc(x1, y1, pointRadius, 0, 2 * Math.PI);
-                ctx.fillStyle = colors.BLUE_COLOR;
+                // Utiliser la nouvelle couleur jaune pour les unités
+                ctx.fillStyle = colors.UNITS_COLOR;
                 ctx.fill();
+                
                 ctx.beginPath();
                 ctx.arc(x2, y2, pointRadius, 0, 2 * Math.PI);
+                // Utiliser la nouvelle couleur jaune pour les unités
+                ctx.fillStyle = colors.UNITS_COLOR;
                 ctx.fill();
+                
                 ctx.beginPath();
                 ctx.moveTo(x1, y1);
                 ctx.lineTo(x2, y2);
-                ctx.strokeStyle = colors.BLUE_COLOR;
+                // Utiliser la nouvelle couleur jaune pour les unités
+                ctx.strokeStyle = colors.UNITS_COLOR;
                 ctx.lineWidth = 2;
                 ctx.stroke();
             }
@@ -746,19 +759,23 @@
                     const y = centerY + mainRadius * Math.sin(angle);
                     points.push({ x, y });
                 }
+                
                 for (const point of points) {
                     ctx.beginPath();
                     ctx.arc(point.x, point.y, pointRadius, 0, 2 * Math.PI);
-                    ctx.fillStyle = colors.BLUE_COLOR;
+                    // Utiliser la nouvelle couleur jaune pour les unités
+                    ctx.fillStyle = colors.UNITS_COLOR;
                     ctx.fill();
                 }
+                
                 ctx.beginPath();
                 ctx.moveTo(points[0].x, points[0].y);
                 for (let i = 1; i < points.length; i++) {
                     ctx.lineTo(points[i].x, points[i].y);
                 }
                 ctx.lineTo(points[0].x, points[0].y);
-                ctx.strokeStyle = colors.BLUE_COLOR;
+                // Utiliser la nouvelle couleur jaune pour les unités
+                ctx.strokeStyle = colors.UNITS_COLOR;
                 ctx.lineWidth = 2;
                 ctx.stroke();
             }
