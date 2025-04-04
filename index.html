@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Représentation Géométrique des Nombres (0-9999)</title>
+    <title>Représentation Géométrique des Nombres (0-9999) - Style Yantra</title>
     <style>
         :root {
             --background-color: #F8F1E9;
-            --canvas-background-color: #333cff; /* Nouveau fond bleu indigo pour le canevas */
+            --canvas-background-color: #333cff; /* Fond bleu indigo pour le canevas */
             --primary-color: #4A6FA5;
-            --units-color: #fcff33; /* Nouvelle couleur jaune pour les unités */
-            --secondary-color: #DAA520;
+            --units-color: #fcff33; /* Jaune pour les unités */
+            --secondary-color: #DAA520; /* Couleur Or/Doré */
             --tens-color: #FF1493; /* Rose foncé pour les dizaines */
             --tens-stroke: #C71585;
             --hundreds-color: #FF69B4; /* Rose moyen pour les centaines */
@@ -146,6 +146,8 @@
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
+            flex-wrap: wrap; /* Ajout pour gérer les boutons d'exemple */
+            justify-content: center; /* Centrer les boutons */
         }
 
         .secondary-btn {
@@ -166,10 +168,12 @@
 
         canvas {
             border: 1px solid var(--border-color);
-            background-color: var(--background-color);
+            background-color: var(--canvas-background-color); /* Changé pour utiliser la variable */
             box-shadow: var(--shadow);
             border-radius: 8px;
             transition: var(--transition);
+            display: block; /* Pour éviter les espaces étranges */
+            margin: auto; /* Centrer si le conteneur est plus large */
         }
 
         .explanation {
@@ -203,13 +207,16 @@
             margin-top: 10px;
             font-weight: 500;
             transition: var(--transition);
+            height: 1.2em; /* Réserver de l'espace pour éviter les sauts */
         }
 
         .legend {
             display: flex;
-            justify-content: space-around;
+            justify-content: center; /* Centrer la légende */
             margin-top: 15px;
             flex-wrap: wrap;
+            max-width: 600px; /* Limiter la largeur */
+            width: 100%;
         }
 
         .legend-item {
@@ -223,6 +230,7 @@
             height: 15px;
             border-radius: 50%;
             margin-right: 8px;
+            border: 1px solid rgba(0,0,0,0.1); /* Léger bordure pour la visibilité */
         }
 
         .tabs {
@@ -264,29 +272,48 @@
             --text-color: #ecf0f1;
             --border-color: #4a5c6b;
             --primary-color: #3498db;
-            --secondary-color: #f1c40f;
+            --secondary-color: #f1c40f; /* Or/Doré en mode sombre */
             --tens-color: #e84393;
             --tens-stroke: #d33682;
             --hundreds-color: #fd79a8;
             --hundreds-stroke: #e84393;
-            --thousands-color: #FFD700;
+            --thousands-color: #FFD700; /* Or un peu plus clair pour milliers en sombre */
             --thousands-stroke: #DAA520;
-            --canvas-background-color: #1a1e2e; /* Version sombre du fond du canevas */
-            --units-color: #fcff33; /* Couleur des unités inchangée en mode sombre */
+            --canvas-background-color: #1a1e2e; /* Fond sombre du canevas */
+            --units-color: #fcff33; /* Couleur des unités inchangée */
         }
 
         body.dark-mode .explanation {
             background-color: #34495e;
         }
 
+        body.dark-mode canvas {
+            border-color: var(--border-color);
+        }
+
         body.dark-mode .secondary-btn {
             background-color: #34495e;
             color: #ecf0f1;
+            border-color: #4a5c6b;
         }
 
         body.dark-mode .secondary-btn:hover {
             background-color: #2c3e50;
         }
+
+        body.dark-mode input[type="number"] {
+             background-color: #34495e;
+             color: #ecf0f1;
+             border-color: #4a5c6b;
+        }
+
+        body.dark-mode input[type="range"] {
+            background-color: #4a5c6b;
+        }
+         body.dark-mode input[type="range"]::-webkit-slider-thumb {
+            background: var(--primary-color);
+        }
+
 
         .fade-in {
             opacity: 0;
@@ -298,30 +325,29 @@
         }
 
         @media (max-width: 768px) {
-            .controls-container {
-                flex-direction: column;
-            }
-            
-            .buttons-container {
-                flex-wrap: wrap;
-            }
-            
-            canvas {
-                width: 100%;
-                height: auto;
-            }
+            body { padding: 10px; }
+            h1 { font-size: 1.5em; }
+            .controls-container { flex-direction: column; }
+            .input-container { width: 100%; justify-content: center;}
+            input[type="number"] { width: 100px; }
+            .buttons-container { justify-content: center; }
+            canvas { width: 95%; height: auto; }
+            .legend { justify-content: center; }
+            .tabs { max-width: 100%; }
+            .tab { padding: 8px 12px; font-size: 0.9em;}
+            .explanation { padding: 15px; }
         }
     </style>
 </head>
 <body>
-    <h1>Représentation Géométrique des Nombres (0-9999)</h1>
-    
+    <h1>Représentation Géométrique des Nombres (0-9999) - Style Yantra</h1>
+
     <div class="tabs">
         <button class="tab active" data-tab="visualization">Visualisation</button>
         <button class="tab" data-tab="explanation">Explication</button>
         <button class="tab" data-tab="examples">Exemples</button>
     </div>
-    
+
     <div id="visualization" class="tab-content active">
         <div class="controls-container">
             <div class="input-container">
@@ -332,114 +358,126 @@
                 ☀️
             </button>
         </div>
-        
+
         <div class="slider-container">
+            <label for="number-slider" style="display: block; text-align: center; margin-bottom: 5px;">Valeur: <span id="slider-value">0</span></label>
             <input type="range" id="number-slider" min="0" max="9999" value="0">
         </div>
-        
+
         <div class="buttons-container">
             <button id="prev-btn" class="secondary-btn">Précédent</button>
             <button id="next-btn" class="secondary-btn">Suivant</button>
             <button id="random-btn" class="secondary-btn">Aléatoire</button>
             <button id="animate-btn">Animation</button>
+             <!-- Les boutons d'exemple seront ajoutés ici par JS -->
         </div>
-        
+
         <div id="error-message" class="error"></div>
-        
+
         <div id="canvas-container" class="fade-in">
             <canvas id="canvas" width="600" height="600"></canvas>
         </div>
-        
+
         <div class="legend">
             <div class="legend-item">
-                <div class="legend-color" style="background-color: var(--secondary-color);"></div>
-                <span>Cercles</span>
+                <div class="legend-color" style="background-color: var(--secondary-color); border: none;"></div>
+                <span>Cercles Guides</span>
             </div>
-            <div class="legend-item">
+             <div class="legend-item">
                 <div class="legend-color" style="background-color: var(--units-color);"></div>
                 <span>Unités</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background-color: var(--tens-color);"></div>
-                <span>Dizaines</span>
+                <span>Dizaines (Pétales)</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background-color: var(--hundreds-color);"></div>
-                <span>Centaines</span>
+                <span>Centaines (Pétales)</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background-color: var(--thousands-color);"></div>
-                <span>Milliers</span>
+                <span>Milliers (Pétales)</span>
             </div>
         </div>
     </div>
-    
+
     <div id="explanation" class="tab-content">
         <div class="explanation">
+             <!-- CONTENU HTML MIS À JOUR -->
             <h3>Règles de représentation :</h3>
+            <p>Une figure géométrique est générée pour chaque nombre de 0 à 9999, basée sur des cercles concentriques et des formes représentant les unités, dizaines, centaines et milliers.</p>
             <p><strong>Unités (à l'intérieur du premier cercle doré) :</strong></p>
             <ul>
                 <li><strong>0</strong> : Cercle doré vide</li>
                 <li><strong>1</strong> : Un point jaune au centre</li>
-                <li><strong>2</strong> : Un segment reliant deux points sur le cercle</li>
-                <li><strong>3</strong> : Un triangle équilatéral avec un sommet en haut</li>
-                <li><strong>4</strong> : Un carré</li>
+                <li><strong>2</strong> : Un segment reliant deux points opposés sur le cercle</li>
+                <li><strong>3</strong> : Un triangle équilatéral inscrit (sommet en haut)</li>
+                <li><strong>4</strong> : Un carré inscrit</li>
                 <li><strong>5</strong> : Un carré + un point au centre</li>
-                <li><strong>6</strong> : Deux triangles équilatéraux symétriques</li>
-                <li><strong>7</strong> : Deux triangles + un point au centre</li>
-                <li><strong>8</strong> : Deux carrés</li>
+                <li><strong>6</strong> : Deux triangles équilatéraux opposés (étoile à 6 branches)</li>
+                <li><strong>7</strong> : Étoile à 6 branches + un point au centre</li>
+                <li><strong>8</strong> : Deux carrés inscrits et pivotés</li>
                 <li><strong>9</strong> : Deux carrés + un point au centre</li>
             </ul>
-            <p><strong>Dizaines (pétales roses foncés sur le premier cercle) :</strong></p>
+            <p><strong>Dizaines (pétales stylisés roses foncés ancrés sur le premier cercle doré) :</strong></p>
             <ul>
+                <li>Le nombre de pétales correspond au chiffre des dizaines (1 à 9).</li>
+                <li>Les pétales sont répartis uniformément autour du cercle.</li>
                 <li><strong>10</strong> : 1 pétale en haut</li>
                 <li><strong>20</strong> : 2 pétales (haut et bas)</li>
                 <li><strong>30</strong> : 3 pétales en triangle</li>
-                <li><strong>40-90</strong> : Distribution en polygones réguliers</li>
+                <li><strong>40-90</strong> : Distribution en polygones réguliers (4 pétales en carré, 5 en pentagone, etc.)</li>
             </ul>
-            <p><strong>Centaines (pétales roses sur le second cercle) :</strong></p>
+            <p><strong>Centaines (pétales stylisés roses ancrés sur le second cercle doré) :</strong></p>
             <ul>
-                <li><strong>100</strong> : 1 pétale en haut</li>
-                <li><strong>200</strong> : 2 pétales (haut et bas)</li>
-                <li><strong>300</strong> : 3 pétales en triangle</li>
-                <li><strong>400-900</strong> : Distribution similaire aux dizaines</li>
+                <li>Le nombre de pétales correspond au chiffre des centaines (1 à 9).</li>
+                <li>Distribution similaire aux dizaines, sur un cercle guide plus grand.</li>
             </ul>
-            <p><strong>Milliers (pétales roses clairs sur le troisième cercle) :</strong></p>
+            <p><strong>Milliers (pétales stylisés roses clairs ancrés sur le troisième cercle doré) :</strong></p>
             <ul>
-                <li><strong>1000</strong> : 1 pétale en haut</li>
-                <li><strong>2000</strong> : 2 pétales (haut et bas)</li>
-                <li><strong>3000</strong> : 3 pétales en triangle</li>
-                <li><strong>4000-9000</strong> : Distribution similaire aux dizaines et centaines</li>
+                 <li>Le nombre de pétales correspond au chiffre des milliers (1 à 9).</li>
+                 <li>Distribution similaire aux dizaines et centaines, sur le cercle guide le plus externe.</li>
+            </ul>
+             <p><strong>Couleurs :</strong></p>
+            <ul>
+                <li>Cercles guides : Doré</li>
+                <li>Unités : Jaune</li>
+                <li>Dizaines : Rose Foncé</li>
+                <li>Centaines : Rose Moyen</li>
+                <li>Milliers : Rose Pâle / Or (mode sombre)</li>
+                <li>Fond du canevas : Bleu Indigo / Bleu Nuit (mode sombre)</li>
             </ul>
         </div>
     </div>
-    
+
     <div id="examples" class="tab-content">
         <div class="explanation">
-            <h3>Exemples et applications :</h3>
-            <p>Cette représentation géométrique des nombres offre plusieurs avantages :</p>
+            <h3>Exemples et Applications :</h3>
+            <p>Cette représentation transforme les nombres en motifs visuels complexes rappelant les Yantras ou Mandalas.</p>
             <ul>
-                <li><strong>Visualisation intuitive</strong> : Structure décimale visualisée.</li>
-                <li><strong>Modèle mental</strong> : Compréhension des valeurs positionnelles.</li>
-                <li><strong>Reconnaissance de motifs</strong> : Identification de motifs mathématiques.</li>
+                <li><strong>Visualisation esthétique</strong> : Chaque nombre a une signature visuelle unique.</li>
+                <li><strong>Exploration des motifs</strong> : Observer comment les chiffres interagissent pour former des motifs.</li>
+                <li><strong>Potentiel méditatif/artistique</strong> : Les formes peuvent être utilisées comme base pour l'art ou la contemplation.</li>
             </ul>
-            <p>Exemples notables :</p>
+            <p>Exemples notables (cliquez sur les boutons d'exemple dans l'onglet Visualisation) :</p>
             <ul>
-                <li><strong>42</strong> : Carré avec 4 pétales roses foncés</li>
-                <li><strong>100</strong> : Cercle doré vide avec 1 pétale rose</li>
-                <li><strong>1423</strong> : Triangle, 2 pétales roses foncés, 4 pétales roses, 1 pétale rose clair</li>
-                <li><strong>7777</strong> : Deux triangles + point, 7 pétales roses foncés, 7 pétales roses, 7 pétales roses clairs</li>
+                <li><strong>42</strong> : Carré jaune (2) à l'intérieur, 4 pétales roses foncés (40) sur le premier cercle.</li>
+                <li><strong>100</strong> : Cercle doré vide (0), pas de pétales de dizaines, 1 pétale rose (100) sur le deuxième cercle.</li>
+                <li><strong>1423</strong> : Triangle jaune (3), 2 pétales roses foncés (20), 4 pétales roses (400), 1 pétale rose clair/or (1000).</li>
+                <li><strong>7777</strong> : Étoile 6 branches + point central (7), 7 pétales roses foncés (70), 7 pétales roses (700), 7 pétales roses clairs/or (7000).</li>
             </ul>
-            <p>Utilisez les boutons pour explorer ces exemples.</p>
+            <p>Utilisez les contrôles (slider, boutons) pour explorer la beauté mathématique des nombres !</p>
         </div>
     </div>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
             const numberInput = document.getElementById('number-input');
             const numberSlider = document.getElementById('number-slider');
+            const sliderValueSpan = document.getElementById('slider-value');
             const generateBtn = document.getElementById('generate-btn');
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
@@ -449,39 +487,65 @@
             const errorMessage = document.getElementById('error-message');
             const tabs = document.querySelectorAll('.tab');
             const tabContents = document.querySelectorAll('.tab-content');
-            
+            const canvasContainer = document.getElementById('canvas-container');
+
             let isAnimating = false;
-            let animationSpeed = 1000;
+            let animationSpeed = 200; // Accéléré pour voir plus de formes
             let animationInterval;
             let currentNumber = 0;
             let isDarkMode = false;
-            
+
+            // Met à jour la valeur affichée du slider
+            function updateSliderValue(value) {
+                 sliderValueSpan.textContent = value;
+            }
+
             numberInput.addEventListener('input', function() {
-                const value = parseInt(this.value);
-                if (!isNaN(value) && value >= 0 && value <= 9999) {
-                    numberSlider.value = value;
-                    currentNumber = value;
+                let value = parseInt(this.value);
+                if (isNaN(value)) value = 0; // Gère l'entrée vide
+                value = Math.max(0, Math.min(9999, value)); // Clamp value
+                this.value = value; // Met à jour l'input si clampé
+                numberSlider.value = value;
+                currentNumber = value;
+                updateSliderValue(value);
+                 // Dessine immédiatement pendant la saisie
+                // drawNumber(currentNumber); // Optionnel: dessiner en temps réel
+            });
+
+            // Gestionnaire pour vider l'input si nécessaire
+            numberInput.addEventListener('blur', function() {
+                if (this.value === '') {
+                    this.value = '0';
+                    numberSlider.value = 0;
+                    currentNumber = 0;
+                    updateSliderValue(0);
+                    drawNumber(0);
                 }
             });
-            
+
+
             numberSlider.addEventListener('input', function() {
                 const value = parseInt(this.value);
                 numberInput.value = value;
                 currentNumber = value;
-                drawNumber(value);
+                updateSliderValue(value);
+                drawNumber(value); // Mise à jour en temps réel avec le slider
             });
-            
+
             generateBtn.addEventListener('click', function() {
                 const number = parseInt(numberInput.value);
                 if (isNaN(number) || number < 0 || number > 9999) {
-                    errorMessage.textContent = "Veuillez entrer un nombre entre 0 et 9999.";
+                    errorMessage.textContent = "Nombre invalide (0-9999).";
+                    // Optionnellement, remettre à 0 ou laisser
+                    numberInput.value = currentNumber; // Rétablit la dernière valeur valide
                     return;
                 }
                 errorMessage.textContent = "";
                 currentNumber = number;
+                updateSliderValue(number);
                 drawNumberWithAnimation(number);
             });
-            
+
             prevBtn.addEventListener('click', function() {
                 if (currentNumber > 0) {
                     currentNumber--;
@@ -489,7 +553,7 @@
                     drawNumberWithAnimation(currentNumber);
                 }
             });
-            
+
             nextBtn.addEventListener('click', function() {
                 if (currentNumber < 9999) {
                     currentNumber++;
@@ -497,28 +561,26 @@
                     drawNumberWithAnimation(currentNumber);
                 }
             });
-            
+
             randomBtn.addEventListener('click', function() {
                 const randomNum = Math.floor(Math.random() * 10000);
                 currentNumber = randomNum;
                 updateInputs();
                 drawNumberWithAnimation(randomNum);
             });
-            
+
             animateBtn.addEventListener('click', function() {
                 if (isAnimating) {
                     stopAnimation();
-                    animateBtn.textContent = "Animation";
                 } else {
                     startAnimation();
-                    animateBtn.textContent = "Arrêter";
                 }
             });
-            
+
             themeToggle.addEventListener('click', function() {
                 toggleTheme();
             });
-            
+
             tabs.forEach(tab => {
                 tab.addEventListener('click', function() {
                     const tabId = this.getAttribute('data-tab');
@@ -528,284 +590,345 @@
                     document.getElementById(tabId).classList.add('active');
                 });
             });
-            
+
             function updateInputs() {
                 numberInput.value = currentNumber;
                 numberSlider.value = currentNumber;
+                updateSliderValue(currentNumber);
             }
-            
+
             function startAnimation() {
+                if (isAnimating) return;
                 isAnimating = true;
+                animateBtn.textContent = "Arrêter";
+                animateBtn.style.backgroundColor = '#e74c3c'; // Indicateur visuel
                 animationInterval = setInterval(function() {
                     if (currentNumber < 9999) {
                         currentNumber++;
                     } else {
-                        currentNumber = 0;
+                        currentNumber = 0; // Boucle
                     }
                     updateInputs();
-                    drawNumber(currentNumber);
+                    drawNumber(currentNumber); // Dessin direct sans fade pour la fluidité
                 }, animationSpeed);
             }
-            
+
             function stopAnimation() {
+                if (!isAnimating) return;
                 isAnimating = false;
+                animateBtn.textContent = "Animation";
+                 animateBtn.style.backgroundColor = ''; // Rétablir couleur par défaut
                 clearInterval(animationInterval);
             }
-            
+
             function toggleTheme() {
                 isDarkMode = !isDarkMode;
                 document.body.classList.toggle('dark-mode', isDarkMode);
                 themeToggle.textContent = isDarkMode ? '🌙' : '☀️';
+                // Redessiner avec les nouvelles couleurs du thème
                 drawNumber(currentNumber);
             }
-            
+
             function drawNumberWithAnimation(number) {
-                const canvasContainer = document.getElementById('canvas-container');
                 canvasContainer.classList.remove('fade-in');
-                setTimeout(() => {
-                    canvasContainer.classList.add('fade-in');
-                    drawNumber(number);
-                }, 50);
+                // Force reflow/repaint pour que l'animation redémarre
+                void canvasContainer.offsetWidth;
+                canvasContainer.classList.add('fade-in');
+                drawNumber(number);
             }
-            
+
             function getColors() {
+                const styles = getComputedStyle(document.documentElement);
                 return {
-                    BACKGROUND_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim(),
-                    CANVAS_BACKGROUND_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--canvas-background-color').trim() || '#333cff',
-                    GOLD_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--secondary-color').trim(),
-                    BLUE_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim(),
-                    UNITS_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--units-color').trim() || '#fcff33',
-                    TENS_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--tens-color').trim(),
-                    TENS_STROKE: getComputedStyle(document.documentElement).getPropertyValue('--tens-stroke').trim(),
-                    HUNDREDS_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--hundreds-color').trim(),
-                    HUNDREDS_STROKE: getComputedStyle(document.documentElement).getPropertyValue('--hundreds-stroke').trim(),
-                    THOUSANDS_COLOR: getComputedStyle(document.documentElement).getPropertyValue('--thousands-color').trim(),
-                    THOUSANDS_STROKE: getComputedStyle(document.documentElement).getPropertyValue('--thousands-stroke').trim()
+                    BACKGROUND_COLOR: styles.getPropertyValue('--background-color').trim(),
+                    CANVAS_BACKGROUND_COLOR: styles.getPropertyValue('--canvas-background-color').trim(),
+                    GOLD_COLOR: styles.getPropertyValue('--secondary-color').trim(),
+                    UNITS_COLOR: styles.getPropertyValue('--units-color').trim(),
+                    TENS_COLOR: styles.getPropertyValue('--tens-color').trim(),
+                    TENS_STROKE: styles.getPropertyValue('--tens-stroke').trim(),
+                    HUNDREDS_COLOR: styles.getPropertyValue('--hundreds-color').trim(),
+                    HUNDREDS_STROKE: styles.getPropertyValue('--hundreds-stroke').trim(),
+                    THOUSANDS_COLOR: styles.getPropertyValue('--thousands-color').trim(),
+                    THOUSANDS_STROKE: styles.getPropertyValue('--thousands-stroke').trim(),
+                    TEXT_COLOR: styles.getPropertyValue('--text-color').trim() // Couleur du texte du numéro
                 };
             }
-            
+
             function drawNumber(number) {
                 const colors = getColors();
                 const canvasWidth = canvas.width;
                 const canvasHeight = canvas.height;
                 const centerX = canvasWidth / 2;
                 const centerY = canvasHeight / 2;
-                const R = Math.min(canvasWidth, canvasHeight) / 7; // Rayon du premier cercle doré
-                const pointRadius = 5;
-                const Rd = pointRadius * 3.2; // Rayon des pétales des dizaines
-                const Rc = pointRadius * 4.8; // Rayon des pétales des centaines
-                const Rm = pointRadius * 7.2; // Rayon des pétales des milliers (optionnel)
-                
-                const hundredsCircleRadius = R + Rd; // Rayon du deuxième cercle doré
-                const thousandsCircleRadius = R + Rd + Rc; // Rayon du troisième cercle doré
-                
-                // Utiliser la nouvelle couleur de fond pour le canevas
+
+                // Base radius and petal sizes
+                const R = Math.min(canvasWidth, canvasHeight) / 8; // Ajusté pour laisser plus de place aux pétales
+                const pointRadius = R * 0.08; // Radius des points unités relatif à R
+
+                // Tailles des pétales (ajustables)
+                const petalSizeBase = R * 0.45;
+                const petalSizeTens = petalSizeBase * 1.0;
+                const petalSizeHundreds = petalSizeBase * 1.5;
+                const petalSizeThousands = petalSizeBase * 2.2;
+
+                // Rayons des cercles guides (ajustés pour l'espacement des pétales)
+                // Le rayon R est pour les unités ET la base des pétales de dizaines
+                const hundredsCircleRadius = R + petalSizeTens * 0.6; // Espace après les pétales dizaines
+                const thousandsCircleRadius = hundredsCircleRadius + petalSizeHundreds * 0.7; // Espace après les pétales centaines
+
+                // Fond du canevas
                 ctx.fillStyle = colors.CANVAS_BACKGROUND_COLOR;
                 ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-                
+
                 const thousands = Math.floor(number / 1000);
                 const hundreds = Math.floor((number % 1000) / 100);
                 const tens = Math.floor((number % 100) / 10);
                 const units = number % 10;
-                
-                ctx.fillStyle = isDarkMode ? '#ecf0f1' : '#333';
-                ctx.font = 'bold 24px Arial';
+
+                // Affichage du nombre et décomposition (optionnel, mais utile)
+                ctx.fillStyle = colors.TEXT_COLOR; // Utiliser la couleur du thème pour le texte
+                ctx.font = 'bold 20px Arial';
                 ctx.textAlign = 'center';
-                ctx.fillText(`Nombre: ${number}`, centerX, 30);
-                ctx.font = '16px Arial';
-                ctx.fillText(`Milliers: ${thousands} | Centaines: ${hundreds} | Dizaines: ${tens} | Unités: ${units}`, centerX, 60);
-                
-                // Dessiner le troisième cercle doré (milliers) si nécessaire
+                //ctx.fillText(`Nombre: ${number}`, centerX, 30); // On peut commenter si trop chargé
+                ctx.font = '14px Arial';
+                //ctx.fillText(`M:${thousands} C:${hundreds} D:${tens} U:${units}`, centerX, 50); // Version courte
+
+                // Dessiner les cercles guides et les anneaux de pétales
+                 // Cercle guide externe (Milliers)
                 if (thousands > 0) {
                     ctx.beginPath();
                     ctx.arc(centerX, centerY, thousandsCircleRadius, 0, 2 * Math.PI);
                     ctx.strokeStyle = colors.GOLD_COLOR;
-                    ctx.lineWidth = 3;
+                    ctx.lineWidth = 2; // Plus fin pour les guides
                     ctx.stroke();
-                    drawPetalRing(thousands, colors.THOUSANDS_COLOR, colors.THOUSANDS_STROKE, centerX, centerY, thousandsCircleRadius, Rm);
+                    drawPetalRing(thousands, colors.THOUSANDS_COLOR, colors.THOUSANDS_STROKE, centerX, centerY, thousandsCircleRadius, petalSizeThousands);
                 }
-                
-                // Dessiner le deuxième cercle doré (centaines) si nécessaire
-                if (hundreds > 0) {
+
+                // Cercle guide intermédiaire (Centaines)
+                 if (hundreds > 0) {
                     ctx.beginPath();
                     ctx.arc(centerX, centerY, hundredsCircleRadius, 0, 2 * Math.PI);
                     ctx.strokeStyle = colors.GOLD_COLOR;
-                    ctx.lineWidth = 3;
+                    ctx.lineWidth = 2;
                     ctx.stroke();
-                    drawPetalRing(hundreds, colors.HUNDREDS_COLOR, colors.HUNDREDS_STROKE, centerX, centerY, hundredsCircleRadius, Rc);
+                    drawPetalRing(hundreds, colors.HUNDREDS_COLOR, colors.HUNDREDS_STROKE, centerX, centerY, hundredsCircleRadius, petalSizeHundreds);
                 }
-                
-                // Dessiner les pétales pour les dizaines sur le premier cercle
-                if (tens > 0) {
-                    drawPetalRing(tens, colors.TENS_COLOR, colors.TENS_STROKE, centerX, centerY, R, Rd);
-                }
-                
-                // Dessiner le premier cercle doré (unités)
+
+                 // Cercle guide interne (Dizaines / Unités)
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, R, 0, 2 * Math.PI);
                 ctx.strokeStyle = colors.GOLD_COLOR;
-                ctx.lineWidth = 3;
+                ctx.lineWidth = 2;
                 ctx.stroke();
-                
-                // Dessiner les unités à l'intérieur du premier cercle
-                drawUnits(units, colors, centerX, centerY, R, pointRadius);
+
+                 // Dessiner les pétales pour les dizaines sur le cercle interne R
+                if (tens > 0) {
+                    drawPetalRing(tens, colors.TENS_COLOR, colors.TENS_STROKE, centerX, centerY, R, petalSizeTens);
+                }
+
+                // Dessiner les unités à l'intérieur du cercle R
+                drawUnits(units, colors, centerX, centerY, R * 0.9, pointRadius); // Légèrement réduit pour ne pas toucher le cercle
             }
-            
-            function drawPetalRing(count, fillColor, strokeColor, centerX, centerY, radius, petalRadius) {
+
+            // Fonction qui dessine un anneau de pétales
+            function drawPetalRing(count, fillColor, strokeColor, centerX, centerY, radius, petalSize) {
+                if (count === 0) return; // Ne rien dessiner si count est 0
                 for (let i = 0; i < count; i++) {
-                    let angle = (count === 1) ? -Math.PI / 2 : 
-                               (count === 2) ? -Math.PI / 2 + i * Math.PI : 
-                               -Math.PI / 2 + (i * 2 * Math.PI / count);
-                    const petalStartX = centerX + radius * Math.cos(angle);
-                    const petalStartY = centerY + radius * Math.sin(angle);
-                    drawPetal(petalStartX, petalStartY, angle, petalRadius, fillColor, strokeColor);
+                    // Angle: -PI/2 pour commencer en haut, distribue uniformément
+                    let angle = -Math.PI / 2 + (i * 2 * Math.PI / count);
+
+                    // Position de la base du pétale sur le cercle guide
+                    const petalBaseX = centerX + radius * Math.cos(angle);
+                    const petalBaseY = centerY + radius * Math.sin(angle);
+
+                    // Dessine le pétale individuel
+                    drawPetal(petalBaseX, petalBaseY, angle, petalSize, fillColor, strokeColor);
                 }
             }
-            
-            function drawPetal(x, y, angle, petalRadius, fillColor, strokeColor) {
-                const startX = x;
-                const startY = y;
-                const perpAngle1 = angle + Math.PI / 2;
-                const perpAngle2 = angle - Math.PI / 2;
-                const perpX1 = startX + petalRadius * Math.cos(perpAngle1);
-                const perpY1 = startY + petalRadius * Math.sin(perpAngle1);
-                const perpX2 = startX + petalRadius * Math.cos(perpAngle2);
-                const perpY2 = startY + petalRadius * Math.sin(perpAngle2);
-                
+
+            // NOUVELLE FONCTION drawPetal pour un style Yantra/Lotus
+            function drawPetal(x, y, angle, petalSize, fillColor, strokeColor) {
+                // x, y: point de base du pétale sur le cercle guide
+                // angle: direction radiale vers l'extérieur (où pointe le pétale)
+                // petalSize: facteur de taille pour le pétale
+                // fillColor, strokeColor: couleurs
+
+                // Dimensions du pétale (ajustables pour l'esthétique)
+                const petalLength = petalSize * 2.8; // Longueur du pétale
+                const petalWidth = petalSize * 1.6;  // Largeur maximale du pétale
+
+                ctx.save(); // Sauvegarde l'état actuel (transformations, styles)
+                ctx.translate(x, y); // Place l'origine au point de base du pétale
+                ctx.rotate(angle + Math.PI / 2); // Oriente le canvas pour que le pétale pointe vers le "haut" (axe Y négatif local)
+
+                // Coordonnées relatives (base à 0,0, pointe vers le haut sur l'axe Y)
+                const baseX = 0;
+                const baseY = 0;
+                const tipX = 0;
+                const tipY = -petalLength; // Pointe vers le Y négatif après rotation
+
+                // Points de contrôle pour les courbes de Bézier cubiques
+                // Ajustez ces valeurs pour différentes formes de pétales
+                // Courbe 1 (côté droit, de la base à la pointe)
+                const cp1X = petalWidth * 0.5;  // Contrôle la largeur à la base
+                const cp1Y = -petalLength * 0.3;
+                const cp2X = petalWidth * 0.1;  // Contrôle la largeur près de la pointe
+                const cp2Y = -petalLength * 0.8;
+
+                // Courbe 2 (côté gauche, de la pointe à la base) - symétrique
+                const cp3X = -petalWidth * 0.1; // Symétrique de cp2X
+                const cp3Y = -petalLength * 0.8; // Symétrique de cp2Y
+                const cp4X = -petalWidth * 0.5;  // Symétrique de cp1X
+                const cp4Y = -petalLength * 0.3; // Symétrique de cp1Y
+
                 ctx.beginPath();
-                ctx.moveTo(perpX1, perpY1);
-                ctx.arc(startX, startY, petalRadius, perpAngle1, perpAngle2, true);
+                ctx.moveTo(baseX, baseY);
+                // Dessine le côté droit du pétale
+                ctx.bezierCurveTo(cp1X, cp1Y, cp2X, cp2Y, tipX, tipY);
+                // Dessine le côté gauche du pétale
+                ctx.bezierCurveTo(cp3X, cp3Y, cp4X, cp4Y, baseX, baseY);
                 ctx.closePath();
+
                 ctx.fillStyle = fillColor;
                 ctx.fill();
                 ctx.strokeStyle = strokeColor;
-                ctx.lineWidth = 1.5;
+                ctx.lineWidth = 1.2; // Contour fin
                 ctx.stroke();
+
+                ctx.restore(); // Restaure l'état précédent du contexte (translation/rotation)
             }
-            
-            function drawUnits(units, colors, centerX, centerY, mainRadius, pointRadius) {
-                switch(units) {
-                    case 0: break;
-                    case 1: drawCenterPoint(colors, centerX, centerY, pointRadius); break;
-                    case 2: drawSegment(colors, centerX, centerY, mainRadius, pointRadius); break;
-                    case 3: drawPolygon(3, -Math.PI / 2, colors, centerX, centerY, mainRadius, pointRadius); break;
-                    case 4: drawPolygon(4, 0, colors, centerX, centerY, mainRadius, pointRadius); break;
-                    case 5: 
-                        drawPolygon(4, 0, colors, centerX, centerY, mainRadius, pointRadius); 
-                        drawCenterPoint(colors, centerX, centerY, pointRadius); 
-                        break;
-                    case 6: 
-                        drawPolygon(3, -Math.PI / 2, colors, centerX, centerY, mainRadius, pointRadius); 
-                        drawPolygon(3, Math.PI / 2, colors, centerX, centerY, mainRadius, pointRadius); 
-                        break;
-                    case 7: 
-                        drawPolygon(3, -Math.PI / 2, colors, centerX, centerY, mainRadius, pointRadius); 
-                        drawPolygon(3, Math.PI / 2, colors, centerX, centerY, mainRadius, pointRadius); 
-                        drawCenterPoint(colors, centerX, centerY, pointRadius); 
-                        break;
-                    case 8: 
-                        drawPolygon(4, 0, colors, centerX, centerY, mainRadius, pointRadius); 
-                        drawPolygon(4, Math.PI / 4, colors, centerX, centerY, mainRadius, pointRadius); 
-                        break;
-                    case 9: 
-                        drawPolygon(4, 0, colors, centerX, centerY, mainRadius, pointRadius); 
-                        drawPolygon(4, Math.PI / 4, colors, centerX, centerY, mainRadius, pointRadius); 
-                        drawCenterPoint(colors, centerX, centerY, pointRadius); 
-                        break;
-                }
-            }
-            
-            function drawCenterPoint(colors, centerX, centerY, pointRadius) {
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, pointRadius, 0, 2 * Math.PI);
-                // Utiliser la nouvelle couleur jaune pour les unités
-                ctx.fillStyle = colors.UNITS_COLOR;
-                ctx.fill();
-            }
-            
-            function drawSegment(colors, centerX, centerY, mainRadius, pointRadius) {
-                const angle = Math.PI / 2;
-                const x1 = centerX + mainRadius * Math.cos(angle);
-                const y1 = centerY - mainRadius * Math.sin(angle);
-                const x2 = centerX + mainRadius * Math.cos(angle + Math.PI);
-                const y2 = centerY - mainRadius * Math.sin(angle + Math.PI);
-                
-                ctx.beginPath();
-                ctx.arc(x1, y1, pointRadius, 0, 2 * Math.PI);
-                // Utiliser la nouvelle couleur jaune pour les unités
-                ctx.fillStyle = colors.UNITS_COLOR;
-                ctx.fill();
-                
-                ctx.beginPath();
-                ctx.arc(x2, y2, pointRadius, 0, 2 * Math.PI);
-                // Utiliser la nouvelle couleur jaune pour les unités
-                ctx.fillStyle = colors.UNITS_COLOR;
-                ctx.fill();
-                
-                ctx.beginPath();
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-                // Utiliser la nouvelle couleur jaune pour les unités
-                ctx.strokeStyle = colors.UNITS_COLOR;
+
+
+            // Fonction pour dessiner les unités (inchangée, sauf les couleurs)
+             function drawUnits(units, colors, centerX, centerY, innerRadius, pointRadius) {
+                ctx.fillStyle = colors.UNITS_COLOR; // Couleur pour le remplissage
+                ctx.strokeStyle = colors.UNITS_COLOR; // Couleur pour les lignes
                 ctx.lineWidth = 2;
-                ctx.stroke();
-            }
-            
-            function drawPolygon(sides, rotationOffset, colors, centerX, centerY, mainRadius, pointRadius) {
-                const points = [];
-                for (let i = 0; i < sides; i++) {
-                    const angle = rotationOffset + (i * 2 * Math.PI / sides);
-                    const x = centerX + mainRadius * Math.cos(angle);
-                    const y = centerY + mainRadius * Math.sin(angle);
-                    points.push({ x, y });
+
+                switch(units) {
+                    case 0: break; // Rien à dessiner
+                    case 1: // Point central
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, pointRadius * 1.5, 0, 2 * Math.PI); // Un peu plus gros
+                        ctx.fill();
+                        break;
+                    case 2: // Segment vertical
+                        drawPolygon(2, -Math.PI/2, colors, centerX, centerY, innerRadius, pointRadius);
+                        break;
+                    case 3: // Triangle (pointe en haut)
+                        drawPolygon(3, -Math.PI / 2, colors, centerX, centerY, innerRadius, pointRadius);
+                        break;
+                    case 4: // Carré
+                         drawPolygon(4, Math.PI / 4, colors, centerX, centerY, innerRadius, pointRadius); // Tourné pour être droit
+                        break;
+                    case 5: // Carré + point central
+                        drawPolygon(4, Math.PI / 4, colors, centerX, centerY, innerRadius, pointRadius);
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, pointRadius, 0, 2 * Math.PI);
+                        ctx.fill();
+                        break;
+                    case 6: // Deux triangles (étoile 6 branches)
+                        drawPolygon(3, -Math.PI / 2, colors, centerX, centerY, innerRadius, pointRadius);
+                        drawPolygon(3, Math.PI / 2, colors, centerX, centerY, innerRadius, pointRadius);
+                        break;
+                    case 7: // Étoile 6 branches + point central
+                         drawPolygon(3, -Math.PI / 2, colors, centerX, centerY, innerRadius, pointRadius);
+                         drawPolygon(3, Math.PI / 2, colors, centerX, centerY, innerRadius, pointRadius);
+                         ctx.beginPath();
+                         ctx.arc(centerX, centerY, pointRadius, 0, 2 * Math.PI);
+                         ctx.fill();
+                        break;
+                    case 8: // Deux carrés tournés
+                        drawPolygon(4, Math.PI / 4, colors, centerX, centerY, innerRadius, pointRadius);
+                        drawPolygon(4, 0, colors, centerX, centerY, innerRadius, pointRadius); // Deuxième carré non tourné
+                        break;
+                    case 9: // Deux carrés + point central
+                        drawPolygon(4, Math.PI / 4, colors, centerX, centerY, innerRadius, pointRadius);
+                        drawPolygon(4, 0, colors, centerX, centerY, innerRadius, pointRadius);
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, pointRadius, 0, 2 * Math.PI);
+                        ctx.fill();
+                        break;
                 }
-                
-                for (const point of points) {
+            }
+
+             // Fonction helper pour dessiner polygones/segments inscrits (utilisée par drawUnits)
+            function drawPolygon(sides, rotationOffset, colors, centerX, centerY, radius, pointRadius) {
+                if (sides < 2) return; // Un polygone a au moins 2 côtés (segment)
+
+                const points = [];
+                // Calcule les sommets du polygone
+                for (let i = 0; i < sides; i++) {
+                    // Angle pour chaque sommet
+                    const angle = rotationOffset + (i * 2 * Math.PI / sides);
+                    // Coordonnées du sommet sur le cercle
+                    const x = centerX + radius * Math.cos(angle);
+                    const y = centerY + radius * Math.sin(angle);
+                    points.push({ x, y });
+
+                     // Dessine un petit cercle à chaque sommet (optionnel mais visuel)
                     ctx.beginPath();
-                    ctx.arc(point.x, point.y, pointRadius, 0, 2 * Math.PI);
-                    // Utiliser la nouvelle couleur jaune pour les unités
-                    ctx.fillStyle = colors.UNITS_COLOR;
+                    ctx.arc(x, y, pointRadius, 0, 2 * Math.PI);
+                    ctx.fillStyle = colors.UNITS_COLOR; // Utilise déjà la bonne couleur
                     ctx.fill();
                 }
-                
+
+                // Dessine les lignes reliant les sommets
                 ctx.beginPath();
                 ctx.moveTo(points[0].x, points[0].y);
-                for (let i = 1; i < points.length; i++) {
+                for (let i = 1; i < sides; i++) {
                     ctx.lineTo(points[i].x, points[i].y);
                 }
-                ctx.lineTo(points[0].x, points[0].y);
-                // Utiliser la nouvelle couleur jaune pour les unités
-                ctx.strokeStyle = colors.UNITS_COLOR;
+                 // Ferme le polygone (ou termine le segment si sides=2)
+                if (sides > 2) {
+                    ctx.closePath();
+                }
+                ctx.strokeStyle = colors.UNITS_COLOR; // Utilise déjà la bonne couleur
                 ctx.lineWidth = 2;
                 ctx.stroke();
             }
-            
-            drawNumber(0);
-            
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'ArrowLeft' && currentNumber > 0) {
-                    currentNumber--;
-                    updateInputs();
-                    drawNumberWithAnimation(currentNumber);
-                } else if (e.key === 'ArrowRight' && currentNumber < 9999) {
-                    currentNumber++;
-                    updateInputs();
-                    drawNumberWithAnimation(currentNumber);
-                }
-            });
-            
-            const examples = [67, 3333, 6667, 8889];
-            examples.forEach((num, index) => {
+
+
+            // Initialisation
+            updateSliderValue(0); // Afficher 0 au début
+            drawNumber(0); // Dessiner l'état initial (0)
+
+            // Ajout des boutons d'exemple dynamiquement
+            const exampleNumbers = [42, 100, 1423, 7777, 8008, 9999, 3141, 2718];
+            const buttonsContainer = document.querySelector('.buttons-container');
+            exampleNumbers.forEach(num => {
                 const btn = document.createElement('button');
                 btn.classList.add('secondary-btn');
-                btn.textContent = num;
+                btn.textContent = `Ex: ${num}`;
                 btn.addEventListener('click', function() {
                     currentNumber = num;
                     updateInputs();
                     drawNumberWithAnimation(num);
+                     // Optionnel: passer à l'onglet visualisation si on est ailleurs
+                    if (!document.getElementById('visualization').classList.contains('active')) {
+                         tabs.forEach(t => t.classList.remove('active'));
+                         tabContents.forEach(tc => tc.classList.remove('active'));
+                         document.querySelector('.tab[data-tab="visualization"]').classList.add('active');
+                         document.getElementById('visualization').classList.add('active');
+                    }
                 });
-                document.querySelector('.buttons-container').appendChild(btn);
+                buttonsContainer.appendChild(btn);
             });
+
+             // Gestion des flèches clavier pour Précédent/Suivant
+            document.addEventListener('keydown', function(e) {
+                // Ne pas interférer si l'utilisateur tape dans l'input
+                if (document.activeElement === numberInput) return;
+
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault(); // Empêche le scroll horizontal
+                    prevBtn.click(); // Simule un clic sur le bouton Précédent
+                } else if (e.key === 'ArrowRight') {
+                     e.preventDefault(); // Empêche le scroll horizontal
+                     nextBtn.click(); // Simule un clic sur le bouton Suivant
+                }
+            });
+
         });
     </script>
 </body>
